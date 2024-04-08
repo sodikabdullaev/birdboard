@@ -10,14 +10,17 @@ class ProjectsTest extends TestCase
 {
 
     use WithFaker, RefreshDatabase;
-    public function a_user_can_create_a_project()
+
+    public function test_a_user_can_create_a_project(): void
     {
+        $this->withoutExceptionHandling();
         $attributes = [
             'title' => $this->faker->sentence,
-            'paragraph' => $this->faker->paragraph
+            'description' => $this->faker->paragraph
         ];
 
-        $this->post('/projects');
+        $this->post('/projects', $attributes);
         $this->assertDatabaseHas('projects', $attributes);
+        $this->get('/projects')->assertSee($attributes['title']);
     }
 }
